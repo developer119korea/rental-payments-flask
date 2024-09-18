@@ -7,9 +7,13 @@ from .config import Config
 db = SQLAlchemy()
 ma = Marshmallow()
 
-def create_app():
+def create_app(config_name=None):
     app = Flask(__name__)
-    app.config.from_object(Config)
+
+    if config_name == 'testing':
+        app.config.from_object('app.config.TestingConfig')
+    else:
+        app.config.from_object(Config)
 
     db.init_app(app)
     ma.init_app(app)
