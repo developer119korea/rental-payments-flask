@@ -9,14 +9,14 @@ rental_bp = Blueprint('rental', __name__)
 @rental_bp.route('', methods=['POST'])
 def add_rental():
     data = request.get_json()
+    schema = rental_schema  # RentalSchema 인스턴스 사용
 
     if not data:
         return jsonify({"message": "No input data provided"}), 400
 
-    required_fields = ['key', 'status', 'billingCode', 'productName', 'installmentPlan', 'installmentAmount', 'paymentDay', 'paymentPeriod']
-    for field in required_fields:
-        if field not in data:
-            return jsonify({"message": f"Missing field: {field}"}), 400
+    errors = schema.validate(data)
+    if errors:
+        return jsonify({"message": "Validation error", "errors": errors}), 400
 
     if Rental.query.filter_by(key=data['key']).first() is not None:
         return jsonify({"message": "Rental with this key already exists"}), 400
@@ -25,12 +25,12 @@ def add_rental():
         new_rental = Rental(
             key=data['key'],
             status=data['status'],
-            billing_code=data['billingCode'],
-            product_name=data['productName'],
-            installment_plan=data['installmentPlan'],
-            installment_amount=data['installmentAmount'],
-            payment_day=data['paymentDay'],
-            payment_period=data['paymentPeriod']
+            billing_code=data['billing_code'],
+            product_name=data['product_name'],
+            installment_plan=data['installment_plan'],
+            installment_amount=data['installment_amount'],
+            payment_day=data['payment_day'],
+            payment_period=data['payment_period']
         )
         db.session.add(new_rental)
         db.session.commit()
