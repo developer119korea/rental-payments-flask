@@ -28,3 +28,18 @@ class Rental(db.Model):
         self.installment_amount = installment_amount
         self.payment_day = payment_day
         self.payment_period = payment_period
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "key": self.key,
+            "status": self.status,
+            "billing_code": self.billing_code,
+            "product_name": self.product_name,
+            "installment_plan": self.installment_plan,
+            "installment_amount": self.installment_amount,
+            "payment_day": self.payment_day,
+            "payment_period": self.payment_period,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }

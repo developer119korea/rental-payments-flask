@@ -1,7 +1,7 @@
-from marshmallow import ValidationError, fields, validates
+from marshmallow import ValidationError, validates
 
 from .. import ma
-from ..models.rental_model import Rental
+from ..entities.rental import Rental
 
 
 class RentalSchema(ma.SQLAlchemyAutoSchema):
@@ -11,8 +11,13 @@ class RentalSchema(ma.SQLAlchemyAutoSchema):
 
     @validates('key')
     def validate_key(self, value):
-        if not value:
+        if not value or value.strip() == "":
             raise ValidationError("키는 필수입니다.")
+
+    @validates('billing_code')
+    def validate_billing_code(self, value):
+        if not value or value.strip() == "":
+            raise ValidationError("빌링 코드는 필수입니다.")
 
     @validates('status')
     def validate_status(self, value):

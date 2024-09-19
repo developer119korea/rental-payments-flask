@@ -1,11 +1,10 @@
 from flask import Flask
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
+
+from app.database import db, ma
 
 from .config import Config
+from .core.use_cases import create_use_cases
 
-db = SQLAlchemy()
-ma = Marshmallow()
 
 def create_app(config_name=None):
     app = Flask(__name__)
@@ -18,8 +17,10 @@ def create_app(config_name=None):
     db.init_app(app)
     ma.init_app(app)
 
-    from .routes import register_blueprints
-    register_blueprints(app)
+    create_rental_use_case, get_rentals_use_case, get_rental_by_key_use_case = create_use_cases()
+
+    from .adapters.web import register_blueprints
+    register_blueprints(app, create_rental_use_case, get_rentals_use_case, get_rental_by_key_use_case)
 
     return app
 

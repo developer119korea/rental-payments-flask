@@ -1,7 +1,7 @@
 import unittest
 
 from app import create_app, db
-from app.models.rental_model import Rental
+from app.entities.rental import Rental
 
 
 class RentalRoutesTestCase(unittest.TestCase):
@@ -20,12 +20,12 @@ class RentalRoutesTestCase(unittest.TestCase):
         response = self.client.post('/rentals', json={
             "key": "test_key",
             "status": "active",
-            "billingCode": "billing-12345",
-            "productName": "Test Product",
-            "installmentPlan": 12,
-            "installmentAmount": 100,
-            "paymentDay": 1,
-            "paymentPeriod": 1
+            "billing_code": "billing-12345",
+            "product_name": "Test Product",
+            "installment_plan": 12,
+            "installment_amount": 100,
+            "payment_day": 1,
+            "payment_period": 1
         })
         self.assertEqual(response.status_code, 201)
 
@@ -33,12 +33,12 @@ class RentalRoutesTestCase(unittest.TestCase):
         response = self.client.post('/rentals', json={
             "key": "test_key",
             "status": "active",
-            # "billingCode" 필드가 누락됨
-            "productName": "Test Product",
-            "installmentPlan": 12,
-            "installmentAmount": 100,
-            "paymentDay": 1,
-            "paymentPeriod": 1
+            # "billing_code" 필드가 누락됨
+            "product_name": "Test Product",
+            "installment_plan": 12,
+            "installment_amount": 100,
+            "payment_day": 1,
+            "payment_period": 1
         })
         self.assertEqual(response.status_code, 400)
 
@@ -47,23 +47,23 @@ class RentalRoutesTestCase(unittest.TestCase):
         self.client.post('/rentals', json={
             "key": "test_key",
             "status": "active",
-            "billingCode": "billing-12345",
-            "productName": "Test Product",
-            "installmentPlan": 12,
-            "installmentAmount": 100,
-            "paymentDay": 1,
-            "paymentPeriod": 1
+            "billing_code": "billing-12345",
+            "product_name": "Test Product",
+            "installment_plan": 12,
+            "installment_amount": 100,
+            "payment_day": 1,
+            "payment_period": 1
         })
         # 중복 추가 시도
         response = self.client.post('/rentals', json={
             "key": "test_key",
             "status": "active",
-            "billingCode": "billing-12345",
-            "productName": "Test Product",
-            "installmentPlan": 12,
-            "installmentAmount": 100,
-            "paymentDay": 1,
-            "paymentPeriod": 1
+            "billing_code": "billing-12345",
+            "product_name": "Test Product",
+            "installment_plan": 12,
+            "installment_amount": 100,
+            "payment_day": 1,
+            "payment_period": 1
         })
         self.assertEqual(response.status_code, 400)
 
@@ -75,12 +75,12 @@ class RentalRoutesTestCase(unittest.TestCase):
         self.client.post('/rentals', json={
             "key": "test_key",
             "status": "active",
-            "billingCode": "12345",
-            "productName": "Test Product",
-            "installmentPlan": 12,
-            "installmentAmount": 100,
-            "paymentDay": 1,
-            "paymentPeriod": 1
+            "billing_code": "12345",
+            "product_name": "Test Product",
+            "installment_plan": 12,
+            "installment_amount": 100,
+            "payment_day": 1,
+            "payment_period": 1
         })
         response = self.client.get('/rentals/test_key')
         self.assertEqual(response.status_code, 200)
